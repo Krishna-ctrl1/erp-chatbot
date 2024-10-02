@@ -1,4 +1,4 @@
-# Multifunctional AI Assistant
+# ERP Chatbot
 
 ## Table of Contents
 1. [Introduction](#introduction)
@@ -12,7 +12,7 @@
 
 ## Introduction
 
-This project is a Multifunctional AI Assistant built using Streamlit, OpenAI's GPT models, and various other libraries. It combines chat functionality with image and PDF analysis capabilities, providing a versatile tool for text generation, document analysis, and question-answering.
+This project is an ERP Chatbot built using Streamlit, OpenAI's GPT models, and various other libraries. It combines chat functionality with image and PDF analysis capabilities, providing a versatile tool for text generation, document analysis, and question-answering.
 
 ## Features
 
@@ -106,14 +106,6 @@ The main application logic is contained in `app.py`. Here's a breakdown of its k
 2. **User Authentication**: Basic authentication system is implemented, but for production use, a more robust system should be employed.
 3. **File Upload Limitations**: The app limits uploads to 5 files to prevent resource abuse.
 
-## Future Improvements
-
-1. Implement a more secure authentication system using a database backend.
-2. Add support for more file types in the analysis modes.
-3. Implement caching to improve performance for repeated queries.
-4. Enhance the bill classification system with machine learning models.
-5. Add data visualization features for analysis results.
-6. Implement error handling and logging for better debugging and user experience.
 
 ---
 
