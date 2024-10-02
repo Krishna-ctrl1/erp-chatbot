@@ -1,86 +1,120 @@
 # Multifunctional AI Assistant
 
-This project is a comprehensive AI-powered assistant that combines chatbot functionality with image and PDF analysis capabilities. It leverages OpenAI's GPT models, optical character recognition (OCR), and various Python libraries to provide a versatile tool for natural language processing, document analysis, and information extraction.
+## Table of Contents
+1. [Introduction](#introduction)
+2. [Features](#features)
+3. [Prerequisites](#prerequisites)
+4. [Installation](#installation)
+5. [Usage](#usage)
+6. [Code Structure](#code-structure)
+7. [Security Considerations](#security-considerations)
+8. [Future Improvements](#future-improvements)
+
+## Introduction
+
+This project is a Multifunctional AI Assistant built using Streamlit, OpenAI's GPT models, and various other libraries. It combines chat functionality with image and PDF analysis capabilities, providing a versatile tool for text generation, document analysis, and question-answering.
 
 ## Features
 
-- **Chat Interface**: Engage in conversations with an AI-powered assistant.
-- **Image Analysis**: Upload and analyze images, extract text, and classify bill types.
-- **PDF Analysis**: Extract text from PDF files, including scanned documents.
-- **Question Answering**: Ask questions about the content of uploaded images or PDFs.
-- **Text Summarization**: Generate concise summaries of extracted text.
-- **Multi-file Support**: Process up to 5 images or PDFs simultaneously.
-- **User Authentication**: Secure login system to access the main application.
+1. **User Authentication**: Secure login system to protect access to the application.
+2. **Chat Mode**: Engage in conversations with an AI assistant powered by OpenAI's GPT models.
+3. **Image Analysis**: 
+   - Upload and analyze images (up to 5 at a time)
+   - Extract text from images using OCR (Optical Character Recognition)
+   - Classify bill types based on extracted text
+   - Generate summaries of extracted text
+4. **PDF Analysis**:
+   - Upload and analyze PDF files (up to 5 at a time)
+   - Extract text from PDFs, including text embedded in images within the PDF
+   - Generate summaries of extracted text
+5. **Question-Answering**: Ask questions about the extracted content from images or PDFs
+6. **Chat History**: View past conversations in the sidebar
+7. **File Upload Tracking**: Display names of uploaded files in the sidebar
 
-## Components
+## Prerequisites
 
-1. **app.py**: Main Streamlit application combining all features.
-2. **chatbot.py**: Standalone chatbot implementation.
-3. **imagebot.py**: Image analysis and OCR functionality.
-4. **pdfbot.py**: PDF processing and analysis.
+- Python 3.7+
+- pip (Python package manager)
 
 ## Installation
 
-To set up the Multifunctional AI Assistant, follow these steps:
-
 1. Clone the repository:
    ```
-   git clone https://github.com/your-username/multifunctional-ai-assistant.git
-   cd multifunctional-ai-assistant
+   git clone <repository-url>
+   cd <repository-directory>
    ```
 
-2. Create a virtual environment:
-   ```
-   python -m venv venv
-   source venv/bin/activate  # On Windows, use `venv\Scripts\activate`
-   ```
-
-3. Install the required dependencies:
+2. Install the required packages:
    ```
    pip install -r requirements.txt
    ```
 
-4. Set up environment variables:
-   Create a `.env` file in the project root and add the following:
+3. Set up environment variables:
+   Create a `.env` file in the project root and add your OpenAI API key:
    ```
-   OPENAI_API_KEY=your_openai_api_key
-   LANGCHAIN_API_KEY=your_langchain_api_key
+   OPENAI_API_KEY=your_api_key_here
    ```
 
 ## Usage
 
-### Running the Main Application
+1. Run the Streamlit app:
+   ```
+   streamlit run app.py
+   ```
 
-To launch the main Streamlit application:
+2. Open a web browser and navigate to the URL provided by Streamlit (usually `http://localhost:8501`).
 
-```
-streamlit run app.py
-```
+3. Log in using the predefined credentials:
+   - Username: user1, Password: password1
+   - Username: user2, Password: password2
 
-This will start the web interface where you can:
-- Log in using predefined credentials
-- Chat with the AI assistant
-- Upload and analyze images
-- Process PDF files
-- Ask questions about uploaded content
+4. Choose a mode (Chat, Image Analysis, or PDF Analysis) from the sidebar.
 
-### Using Individual Components
+5. Follow the on-screen instructions for each mode to interact with the AI assistant.
 
-You can also run the individual components separately:
+## Code Structure
 
-- Chatbot: `streamlit run chatbot.py`
-- Image Analysis: `streamlit run imagebot.py`
-- PDF Processing: `streamlit run pdfbot.py`
+The main application logic is contained in `app.py`. Here's a breakdown of its key components:
 
-## Dependencies
+1. **Imports and Setup**:
+   - The code imports necessary libraries and sets up environment variables.
+   - It initializes the EasyOCR reader for text extraction from images.
 
-The project relies on several key libraries and frameworks:
+2. **Authentication System**:
+   - `login()` and `logout()` functions handle user authentication.
+   - `login_page()` renders the login interface.
 
-- Streamlit: For the web interface
-- OpenAI and LangChain: For natural language processing
-- EasyOCR: For optical character recognition
-- PyMuPDF: For PDF processing
-- OpenCV and Pillow: For image handling
-- NumPy: For numerical operations
+3. **Helper Functions**:
+   - `generate_response()`: Generates responses using OpenAI's GPT models.
+   - `build_conversation_context()`: Constructs the conversation history for the chat mode.
+   - `classify_bill_type()`: Determines the type of bill based on extracted text.
 
-Refer to `requirements.txt` for a complete list of dependencies and their versions.
+4. **Main Application Logic (`main_app()`)**:
+   - Implements the core functionality of the three modes: Chat, Image Analysis, and PDF Analysis.
+   - Manages file uploads, text extraction, and interaction with the AI models.
+
+5. **Streamlit UI**:
+   - Creates the user interface using Streamlit components.
+   - Implements sidebar for mode selection and displays chat history and uploaded file names.
+
+6. **Session State Management**:
+   - Utilizes Streamlit's session state to persist data across reruns.
+
+## Security Considerations
+
+1. **API Key Protection**: The OpenAI API key is stored in an environment variable to prevent exposure.
+2. **User Authentication**: Basic authentication system is implemented, but for production use, a more robust system should be employed.
+3. **File Upload Limitations**: The app limits uploads to 5 files to prevent resource abuse.
+
+## Future Improvements
+
+1. Implement a more secure authentication system using a database backend.
+2. Add support for more file types in the analysis modes.
+3. Implement caching to improve performance for repeated queries.
+4. Enhance the bill classification system with machine learning models.
+5. Add data visualization features for analysis results.
+6. Implement error handling and logging for better debugging and user experience.
+
+---
+
+This README provides an overview of the Multifunctional AI Assistant. For more detailed information or support, please contact the project maintainers.
