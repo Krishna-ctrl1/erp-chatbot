@@ -1,19 +1,88 @@
 import streamlit as st
+import mysql.connector
+import bcrypt
+import openai
+from langchain_openai import ChatOpenAI
+from langchain_core.output_parsers import StrOutputParser
+from langchain_core.prompts import ChatPromptTemplate
+import os
+from dotenv import load_dotenv
+import cv2
+import easyocr
+import numpy as np
+import fitz  # PyMuPDF
+from PIL import Image
 
-# Define login credentials (for demonstration)
-credentials = {
-    'user1': 'password1',
-    'user2': 'password2'
-}
+# Define database connection parameters
+DB_HOST = 'localhost'
+DB_USER = 'streamlit_user'
+DB_PASSWORD = 'your_password'
+DB_NAME = 'streamlit_app_db'
 
-# Login function
+# Connect to the MySQL database
+def create_connection():
+    try:
+        conn = mysql.connector.connect(
+            host=DB_HOST,
+            user=DB_USER,
+            password=DB_PASSWORD,
+            database=DB_NAME
+        )
+        return conn
+    except mysql.connector.Error as err:
+        st.error(f"Error: {err}")
+        return None
+
+# Login function with database authentication
 def login(username, password):
-    if credentials.get(username) == password:
-        st.session_state['authenticated'] = True
-        st.success(f"Welcome, {username}!")
-    else:
-        st.session_state['authenticated'] = False
-        st.error("Invalid credentials. Please try again.")
+    conn = create_connection()
+    if not conn:
+        st.error("Unable to connect to the database.")
+        return
+
+    cursor = conn.cursor(dictionary=True)
+
+    try:
+        # Fetch the user details from the database
+        query = "SELECT * FROM users WHERE username = %s"
+        cursor.execute(query, (username,))
+        user = cursor.fetchone()
+
+        if user and bcrypt.checkpw(password.encode('utf-8'), user['password_hash'].encode('utf-8')):
+            st.session_state['authenticated'] = True
+            st.success(f"Welcome, {username}!")
+        else:
+            st.session_state['authenticated'] = False
+            st.error("Invalid credentials. Please try again.")
+    except mysql.connector.Error as err:
+        st.error(f"Database error: {err}")
+    finally:
+        cursor.close()
+        conn.close()
+
+# Register function to add new users (for demonstration purposes)
+def register(username, password):
+    conn = create_connection()
+    if not conn:
+        st.error("Unable to connect to the database.")
+        return
+
+    cursor = conn.cursor()
+
+    # Hash the password
+    password_hash = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+
+    try:
+        # Insert user into the database
+        query = "INSERT INTO users (username, password_hash) VALUES (%s, %s)"
+        cursor.execute(query, (username, password_hash))
+        conn.commit()
+        st.success("User registered successfully. You can now login.")
+    except mysql.connector.Error as err:
+        st.error(f"Database error: {err}")
+    finally:
+        cursor.close()
+        conn.close()
 
 # Logout function
 def logout():
@@ -30,6 +99,9 @@ def login_page():
     if st.button("Login"):
         login(username, password)
 
+    if st.button("Register"):
+        register(username, password)
+
     if 'authenticated' not in st.session_state or not st.session_state['authenticated']:
         st.stop()  # Stop the app execution if not authenticated
 
@@ -37,20 +109,6 @@ def login_page():
 def main_app():
     st.title("Main App")
     st.write("You are logged in and can now access the main app.")
-
-    import openai
-    from langchain_openai import ChatOpenAI
-    from langchain_core.output_parsers import StrOutputParser
-    from langchain_core.prompts import ChatPromptTemplate
-    import os
-    from dotenv import load_dotenv
-    import cv2
-    import easyocr
-    import numpy as np
-    import fitz  # PyMuPDF
-    from PIL import Image
-
-
 
     # Load environment variables
     load_dotenv()
@@ -102,11 +160,11 @@ def main_app():
             "Internet Bill": ["internet", "wifi", "broadband", "cable"],
             "Phone Bill": ["phone", "mobile", "cell", "telecom"],
         }
-        
+
         for bill_type, keywords in bill_types.items():
             if any(keyword in extracted_text.lower() for keyword in keywords):
                 return bill_type
-        
+
         return "Unknown Bill Type"
 
     # Initialize session state
@@ -126,7 +184,7 @@ def main_app():
     if mode == "Chat":
         st.subheader("💬 Chat Mode")
         user_input = st.text_input("You:", key="chat_input")
-        
+
         if user_input:
             conversation = build_conversation_context(st.session_state["chat_history"])
             response = generate_response(chat_prompt, api_key, "gpt-4", conversation=conversation, new_question=user_input)
@@ -136,14 +194,14 @@ def main_app():
     elif mode == "Image Analysis":
         st.subheader("🖼 Image Analysis Mode")
         uploaded_images = st.file_uploader("Upload Image Files (up to 5)", type=["png", "jpeg", "jpg"], accept_multiple_files=True)
-        
+
         if uploaded_images and len(uploaded_images) <= 5:
             for uploaded_image in uploaded_images:
                 st.image(uploaded_image, caption=uploaded_image.name, use_column_width=True)
                 image = cv2.imdecode(np.frombuffer(uploaded_image.read(), np.uint8), cv2.IMREAD_COLOR)
                 result = reader.readtext(image)
                 extracted_text = ' '.join([text[1] for text in result])
-                
+
                 if extracted_text:
                     st.success(f"Text extracted from {uploaded_image.name}")
                     bill_type = classify_bill_type(extracted_text)
@@ -154,20 +212,20 @@ def main_app():
                     st.session_state["file_names"].append(uploaded_image.name)
                 else:
                     st.warning(f"No text could be extracted from {uploaded_image.name}")
-        
+
         elif len(uploaded_images) > 5:
             st.warning("Please upload up to 5 images only.")
 
     elif mode == "PDF Analysis":
         st.subheader("📄 PDF Analysis Mode")
         uploaded_pdfs = st.file_uploader("Upload PDF Files (up to 5)", type=["pdf"], accept_multiple_files=True)
-        
+
         if uploaded_pdfs and len(uploaded_pdfs) <= 5:
             for uploaded_pdf in uploaded_pdfs:
                 st.write(f"Processing: {uploaded_pdf.name}")
                 pdf_document = fitz.open(stream=uploaded_pdf.read(), filetype="pdf")
                 extracted_text = ""
-                
+
                 for page in pdf_document:
                     text = page.get_text()
                     if text.strip():
@@ -178,7 +236,7 @@ def main_app():
                         img_np = np.array(img)
                         ocr_result = reader.readtext(img_np, detail=0)
                         extracted_text += ' '.join(ocr_result) + " "
-                
+
                 if extracted_text.strip():
                     st.success(f"Text extracted from {uploaded_pdf.name}")
                     summary = generate_response(summary_prompt, api_key, "gpt-4", extracted_text=extracted_text)
@@ -187,7 +245,7 @@ def main_app():
                     st.session_state["file_names"].append(uploaded_pdf.name)
                 else:
                     st.warning(f"No text could be extracted from {uploaded_pdf.name}")
-        
+
         elif len(uploaded_pdfs) > 5:
             st.warning("Please upload up to 5 PDFs only.")
 
