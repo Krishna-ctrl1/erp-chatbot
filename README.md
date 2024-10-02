@@ -109,4 +109,4 @@ The main application logic is contained in `app.py`. Here's a breakdown of its k
 
 ---
 
-This README provides an overview of the Multifunctional AI Assistant. For more detailed information or support, please contact the project maintainers.
+This README provides an overview of the ERP Chatbot.
