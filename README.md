@@ -84,17 +84,3 @@ The project relies on several key libraries and frameworks:
 - NumPy: For numerical operations
 
 Refer to `requirements.txt` for a complete list of dependencies and their versions.
-
-## Contributing
-
-Contributions to the Multifunctional AI Assistant are welcome! Please feel free to submit pull requests, create issues or spread the word.
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## Acknowledgments
-
-- OpenAI for providing the GPT models
-- The creators and maintainers of all the open-source libraries used in this project
-
