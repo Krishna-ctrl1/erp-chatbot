@@ -64,3 +64,10 @@ This Streamlit application provides an ERP (Enterprise Resource Planning) chatbo
 - PyMuPDF for PDF processing
 - Streamlit for the web application framework
 - OpenAI for providing the GPT models
+
+## Contributors
+
+- Shreyaan Loke: OCR Implemantation, PDF Reader, Multiple Files Upload
+- Krishna Gupta: Chatbot, PDF Loading Implementation
+- Zulqarnain Ahmed: Streamlit Interface, Authentication with Database
+- Kumarran Mahesh: Streamlit, Github, PPT
