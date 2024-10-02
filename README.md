@@ -58,14 +58,6 @@ This Streamlit application provides an ERP (Enterprise Resource Planning) chatbo
 
 5. Follow the on-screen instructions to interact with the chatbot, upload images/PDFs, or ask questions about the analyzed content.
 
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
 ## Acknowledgements
 
 - OpenAI for providing the GPT models
