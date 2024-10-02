@@ -60,7 +60,7 @@ This Streamlit application provides an ERP (Enterprise Resource Planning) chatbo
 
 ## Acknowledgements
 
-- OpenAI for providing the GPT models
 - EasyOCR for optical character recognition
 - PyMuPDF for PDF processing
 - Streamlit for the web application framework
+- OpenAI for providing the GPT models
