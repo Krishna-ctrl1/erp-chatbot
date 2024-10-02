@@ -35,8 +35,8 @@ def login_page():
 
 # Main app logic
 def main_app():
-    st.title("ERP Chatbot")
-    st.write("You are logged in and can now access the app.")
+    st.title("Main App")
+    st.write("You are logged in and can now access the main app.")
 
     import openai
     from langchain_openai import ChatOpenAI
@@ -118,7 +118,7 @@ def main_app():
         st.session_state["file_names"] = []
 
     # Streamlit UI
-    st.title("🤖 ERP Chatbot")
+    st.title("🤖 Multifunctional AI Assistant")
 
     # Sidebar for mode selection
     mode = st.sidebar.selectbox("Choose Mode", ["Chat", "Image Analysis", "PDF Analysis"])
