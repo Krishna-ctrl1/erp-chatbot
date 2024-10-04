@@ -17,4 +17,4 @@ jobs:
       - name: Push to hub
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
-        run: git push https://krish060705:$HF_TOKEN@huggingface.co/spaces/krish060705/erpbot main
+        run: git push --force https://krish060705:$HF_TOKEN@huggingface.co/spaces/krish060705/erpbot main
