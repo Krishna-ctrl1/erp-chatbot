@@ -1,3 +1,13 @@
+---
+title: ERP Bot
+emoji: 😜
+colorFrom: blue
+colorTo: red
+sdk: streamlit
+app_file: app.py
+pinned: false
+---
+
 # ERP Chatbot with Image and PDF Analysis
 
 This Streamlit application provides an ERP (Enterprise Resource Planning) chatbot with additional capabilities for image and PDF analysis. It integrates natural language processing, OCR (Optical Character Recognition), and document analysis to offer a versatile tool for various business needs.
