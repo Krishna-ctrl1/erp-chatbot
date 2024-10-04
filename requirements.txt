@@ -65,3 +65,4 @@ easyocr
 PyMuPDF
 pdf2image
 numpy
+mysql
